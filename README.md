@@ -22,5 +22,3 @@ To be eventually hosted on [engineering.caribouwealth.com](https://engineering.c
   className="w-48 h-48 rounded-full"
 />
 ```
-
-# Original 
