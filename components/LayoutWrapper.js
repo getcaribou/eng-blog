@@ -1,11 +1,12 @@
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
+import Logo from '@/data/caribou-logo.svg'
 import Link from './Link'
 import SectionContainer from './SectionContainer'
 import Footer from './Footer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
+
 
 const LayoutWrapper = ({ children }) => {
   return (
@@ -15,7 +16,7 @@ const LayoutWrapper = ({ children }) => {
           <div>
             <Link href="/" aria-label="Tailwind CSS Blog">
               <div className="flex items-center justify-between">
-                <div className="mr-3">
+                <div className="w-10 mr-3">
                   <Logo />
                 </div>
                 {typeof siteMetadata.headerTitle === 'string' ? (
