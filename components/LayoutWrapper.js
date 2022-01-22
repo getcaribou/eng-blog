@@ -7,7 +7,6 @@ import Footer from './Footer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 
-
 const LayoutWrapper = ({ children }) => {
   return (
     <SectionContainer>
