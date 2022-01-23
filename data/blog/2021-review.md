@@ -229,7 +229,7 @@ Leza implemented a simple typesafe feature flagging system for the front end tha
 
 This library is used extensively by our team and is quite elegant in the way that it works, however it does have its limitations. 
 
-The RFC for this functionality is publicly available [here](https://www.notion.so/caribouwealth/Feature-Flags-System-37633971984c4c8e92523c54023e124c).
+The RFC for this functionality is publicly available [here](https://caribouwealth.notion.site/Feature-Flags-System-37633971984c4c8e92523c54023e124c).
 
 
 **Many Improvements To Inbox UI/UX Over Time**
