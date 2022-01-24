@@ -10,7 +10,7 @@ summary: Documenting Caribou's Engineering team highlights for 2021
 2021 proved to be a massive success for Caribou as a whole. We managed to:
 
 - Form a fast-paced and experienced founding engineering team with an obsession over code quality + correctness, functional programming and moving hella fast ⚡
-- Close 7 Firms, each with somewhere between \$300 million to \$2.7B in Assets Under Management!!!
+- Begin working with dozens of financial advisory firms, each with somewhere between \$300 million to \$2.7B in Assets Under Management!!!
 - Ship 3 separate web applications to end users, develop an email notifications system, a feature flagging system, a secure HIPAA-compliant email alternative, Firm management system, and much more 
 - Closed our seed round of $2.5M by some of the best angels in the startup scene (round led by the Altmans)
 
