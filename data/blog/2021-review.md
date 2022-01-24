@@ -1,6 +1,6 @@
 ---
 title: 2021 Year Review
-authors: ['giorgiodelgado']
+authors: [giorgiodelgado]
 date: 2022-01-08
 tags: [management]
 draft: false
@@ -25,7 +25,8 @@ At the time of my joining, Caribou had a single web application (codenamed "**HA
 Given the waterfall-style of **HA Dash**'s development, it had not been launched despite it already having a lot of useful functionality already.
 
 ![early HA Dash](/static/images/early-ha-dash.png)
-> Screenshot of one of the pages of "HA Dash", which we use to manage cases (anything from insurance cost analysis to urgent cancer healthcare navigation and planning).
+
+*Screenshot of one of the pages of "HA Dash", which we use to manage cases (anything from insurance cost analysis to urgent cancer healthcare navigation and planning).*
 
 Thus, it became clear that the first order of business for the engineering team and culture would be to develop a mindset of "**always be shipping**". And so I went about setting up the infrastructure to allow for such a culture to flourish:
 
@@ -70,6 +71,9 @@ import { createFirm } from 'resources/firm'
 import { RbacPermission } from 'router/rbac'
 import { createFirmParser, RawFirm } from './utils'
 
+// Using template literal types to generate a union of
+// all possible RBAC permissions
+// https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html
 const requiredPermissions: RbacPermission = 'create:firm'
 
 const config = {
@@ -85,7 +89,8 @@ const config = {
 
 
 // `null` type argument specifies the response body
-// `RawFirm` represents the incoming request body (must conform with type of `parser` above)
+// `RawFirm` represents the incoming request body (must conform with type
+//  of `parser` above)
 //      ... this isn't just some flimsy typecast
 export default route<null, RawFirm>(config, ({ body, utils }) =>
   createFirm(body) // returns `QueryResult<Firm>`
@@ -115,7 +120,7 @@ A few years ago I developed a library specifically for this purpose:
 
 `neverthrow` is an integral part of our tech stack and how we write code at Caribou. It's safe to say that Algebraic Data Types are here to stay at Caribou.
 
-The `Result` type is intentionally used accross all layers of our tech stack to significantly reduce runtime exceptions and force our development team to handle errors - or at the very least acknowledge that almost anything that a developer implements has failure cases - even those computataions that are not asynchronous.
+The `Result` type is intentionally used accross all layers of our tech stack to significantly reduce runtime exceptions and force our development team to handle errors - or at the very least acknowledge that almost anything that a developer implements has failure cases - even those computations that are not asynchronous.
 
 Some examples for `Result` types in our system are: 
 
@@ -130,16 +135,16 @@ type RouteResult<T> = ResultAsync<AppData<T>, RouteError>
 
 After having launched **HA Dash** to help us do case management, our focus shifted over to executing on the vision of providing clients of financial advisors with an exceptional experience on their journey to improve their healthcare finance situation. That product was eventually given the name **HealthPlanner**.
 
-In reality, **HealthPlanner** is an all-encompassing term that represents several applications (namely, one portal for the financial advisor, and another portal for the clients of the financial advisors).
+In reality, **HealthPlanner** is an all-encompassing term that represents several applications (namely, one portal for the financial advisor, and another portal for the clients of the financial advisors), and different services.
 
-The first order of business was to get clients to stop using email to communicate with us. Thus, the first feature in the HealthPlanner application would be a secure alternative to email that complied with HIPAA regulations.
+The first order of business was to get clients to stop using email to communicate with us. Thus, the first feature in the **HealthPlanner** application would be a secure alternative to email that complied with HIPAA regulations.
 
 In order to move quickly, we made the decision to not re-invent the wheel and instead leverage a 3rd-party tool to manage the infrastructure of messaging; [Stream](https://getstream.io/). With Stream, we were free to simply concern ourselves over the UI/UX of this secure messaging tool (which we now call **Inbox**), and not have to worry about the intricate details of modelling a communication / chat system.
 
 
 ![inbox](/static/images/ha-dash-inbox.png)
 
-*This is what Inbox looks like for our staff. We modelled the UI/UX after GMail. It's virtually the same as Gmail from the point of view of the end user. Yet we don't rely on SMTP. All communication is handled by Stream.*
+*This is what Inbox looks like for our staff. We modelled the UI/UX after GMail. It's virtually the same as GMail from the point of view of the end user. Yet we don't rely on SMTP. All communication is handled by Stream.*
 
 ---
 
@@ -180,7 +185,7 @@ Client HealthPlanner launched around April of 2021 and has almost entirely repla
 
 After launching a secure email alternative and introducing it to clients, we transitioned over to improving the experience for Financial Advisors and ensuring that they too are also communicating in a HIPAA-compliant way with us. 
 
-As such, we launched account management within HA Dash to allow our team to:
+As such, we launched account management within **HA Dash** to allow our team to:
 
 * Create firms on a need-to basis
 * Add financial advisors to those firms
@@ -220,6 +225,11 @@ In order to promote usage of these applications and create a habit of using our 
 Developing this email notifcation system was a very fun experience because we went through a formal RFC process. I authored the Design Document while my colleague [Leza](https://github.com/lemol) combed through the proposal and provided lots of feedback and guidance along the way in order to ensure that the proposed solution addressed all of the business requirements in an effective manner.
 
 
+![notifications RFC Table Of Contents](/static/images/notifs-toc.png)
+
+*Screenshot of the Table of Contents of our most lengthy RFC / Design Doc to date*
+
+
 
 ## Other Notable Features
 
@@ -234,7 +244,7 @@ The RFC for this functionality is publicly available [here](https://caribouwealt
 
 **Many Improvements To Inbox UI/UX Over Time**
 
-Our colleague Daniel has submitted many improvements to make the UX of Inbox even better for all of our users. Event small things like a clean "empty state" UI when someone's Inbox is empty.
+Our colleague Daniel has submitted many improvements to make the UX of Inbox even better for all of our users. Even small things like a clean "empty state" UI when someone's Inbox is empty.
 
 
 ![empty inbox](/static/images/empty-inbox-ui.png)
@@ -254,66 +264,22 @@ By December, our engineering team was at 4 engineers, all distributed in various
 * Leza in Angola
 * Daniel in South Africa
 
+... And now, we're already at 7 as of January 2022!!
 
-... And now, we're already at 7!!
-
-
-## Christmas Week Huge Success
+This is a fantastic team of high-ownership folks who love what they do and are fantastic at it. It really makes "coming into work" every day a joy.
 
 
+# Setting Our Sights On Huge Goals For 2022
 
-## Notable Processes Developed 
+2022 has already kicked off with a bang. Tam rearchitected our `frontends` monorepo to allow for an even better CI/CD experience and even tighter developer feedbackloops. And we're on the verge of shipping two massive features:
 
-* Type 1 vs. Type 2 Decisions
+* In house surveys for our clients (no longer constrained by the third-party survey tool we were using before)
+* Household management for Financial Advisors (they will no longer depend on us to do certain time consumering tasks on their behalf, in addition to providing a much better user experience to our advisors)
 
-* You can merge into staging without a code review
-
-* QA Docs
+And this is just the start ... We cannot wait to see what we accomplish this year!
 
 
-Outline
+# Did you enjoy this post? We're hiring!
 
-- January
-    - Getting reached out to by Cory & Christine
-    - Deciding to join
-
-- Joining on February
-
-- monorepo setup to share code between files
-    - You don't need any 3rd party tools to have a monorepo setup with shared code
-        - Just configure the tsc compiler to reference various top-level folders
-
-- Getting a grasp on things and focusing on actually getting our systems to be put to use
-    - Moving over to GCP
-        - Inheriting a mess of a codebase
-            - DB was confured using Sweedish Collation
-    - Moving from Jira to Linear
-    - Setting up TypeScript accross all projects
-    - Introducing `neverthrow`
-    - Using an improved version of parlez-vous' route function
-
-- Goal #1 making HA Dash useable for our team
-    - Actually useful case management
-      - Notes & time tracking
-    - Assigning folks to cases
-
-- Shipping V1 of messaging
-
-- Getting folks to use Client HealthPlanner
-
-- Developing processes focused on speed and reliability
-
-- Leza joining (July)
-
-- Leza implementing a feature flag system
-    - Link to page
-
-- Developing notifications system (July, with Lez)
-    - Leveraging an RFC / Design Document Process
-    - Using `flecha` 
-
-- Daniel joining (October)
-
-- Tam joining  (November)
-    - Tam implementing an improvement over monorepos
+We have several [open roles](https://caribouwealth.notion.site/Careers-at-Caribou-357783b6007f4d15bae8c7b9651cebf5) accros Ops, Design, Marketing and Engineering!
 

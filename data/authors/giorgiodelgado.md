@@ -1,6 +1,6 @@
 ---
 name: Giorgio Delgado
-avatar: /static/images/avatar.png
+avatar: /static/images/gio-avatar.jpg
 occupation: Founding Engineer
 twitter: https://twitter.com/_gdelgado
 linkedin: https://linkedin.com/in/giorgiodelgado
