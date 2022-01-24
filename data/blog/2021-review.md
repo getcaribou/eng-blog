@@ -4,7 +4,7 @@ authors: [giorgiodelgado]
 date: 2022-01-08
 tags: [management]
 draft: false
-summary: Documenting 2021's highlights of Caribou's Engineering team
+summary: Documenting Caribou's Engineering team highlights for 2021
 ---
 
 2021 proved to be a massive success for Caribou as a whole. We managed to:
@@ -273,13 +273,13 @@ This is a fantastic team of high-ownership folks who love what they do and are f
 
 2022 has already kicked off with a bang. Tam rearchitected our `frontends` monorepo to allow for an even better CI/CD experience and even tighter developer feedbackloops. And we're on the verge of shipping two massive features:
 
-* In house surveys for our clients (no longer constrained by the third-party survey tool we were using before)
-* Household management for Financial Advisors (they will no longer depend on us to do certain time consumering tasks on their behalf, in addition to providing a much better user experience to our advisors)
+* In-house surveys for our clients (no longer constrained by the third-party survey tool we were using before)
+* Household management for Financial Advisors (they will no longer depend on us to do certain time consuming tasks on their behalf - in addition to providing a much better user experience to our advisors)
 
 And this is just the start ... We cannot wait to see what we accomplish this year!
 
 
 # Did you enjoy this post? We're hiring!
 
-We have several [open roles](https://caribouwealth.notion.site/Careers-at-Caribou-357783b6007f4d15bae8c7b9651cebf5) accros Ops, Design, Marketing and Engineering!
+We have several [open roles](https://caribouwealth.notion.site/Careers-at-Caribou-357783b6007f4d15bae8c7b9651cebf5) across Ops, Design, Marketing and Engineering!
 
