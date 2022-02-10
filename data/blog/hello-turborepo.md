@@ -1,12 +1,11 @@
 ---
 title: Turborepo At Caribou
-date: 2022-01-08
+authors: [tcarre]
+date: 2022-02-10
 tags: [devops]
 draft: false
-summary: Weee
+summary: Challenges scaling monorepo with npm workspaces, turborepo and CircleCI
 ---
-
-# Challenges scaling monorepo with npm workspaces, turborepo and CircleCI
 
 We at Caribou have recently adopted a new TypeScript monorepo stack for our app frontends, starting from a single package all rebuilt by Netlify at every release.
 
@@ -14,16 +13,16 @@ As our number of apps and codebases grew, we decided that we wanted to:
 
 - Save time and money on ever increasing build times
     - Build times were increasing dramatically as we went from 2 apps in a monorepo to 4,and thus needed to build & deploy each one even though we had only made a change on one of them
-- Enable the granular tracking of individual application deployments for our metrics tracking
+- Enable the granular tracking of individual application deployments for our metrics monitoring
 - Add CircleCI as a layer between GitHub and Netlify to manage our CI pipeline
     - Our other repos were already on CircleCI, so this allowed us to unify our CI/CD process
 - Decouple builds and deployments to save time and scale further
 
-As we’ve faced multiple roadblocks undergoing this transition, we decided to record them for the benefit of developers at Caribou or elsewhere who may undertake any similar endeavour.
+As we’ve faced multiple roadblocks undergoing this transition, we decided to record them for the benefit of developers at Caribou or anyone else undertaking similar endeavours.
 
 ## Starting point and stack choice
 
-![./img/1642780105.png](Challenges%20scaling%20monorepo%20with%20npm%20workspaces,%20t%2043bc6e39cf4f47f29c4bf341aa8a8d7b/1642780105.png)
+![Directory structure](/static/images/monorepo/1642780105.png)
 
 We started from a flat file system containing multiple apps that were all located in the project’s root folder. The directory structure itself needed work.
 
@@ -37,7 +36,8 @@ We had a first look at monorepo management. We knew [Lerna](https://lerna.js.org
 
 Turborepo works with one of Yarn, npm, or pnpm workspaces. We already used npm as a package manager, so in order to keep things familiar we went with npm workspaces.
 
-Finally, we already used CircleCI for our backend CI, so the choice was already made. 
+Finally, we already used CircleCI for our backend CI, so we wanted to keep using
+CircleCI on the frontend.
 
 ## Setting up the npm workspace
 
@@ -79,7 +79,7 @@ npm run -w blog start
 
 ## Separating dependencies
 
-One detail which was not immediately obvious to me during the transition is that the root `package.json` should only contain dev dependencies. (It doesn’t need to be all of them, either.) I initially thought I should keep common dependencies in the root package.json. This caused React errors from having multiple instances of React running. 
+One detail which was not immediately obvious during the transition is that the root `package.json` should only contain dev dependencies. (It doesn’t need to be all of them, either.) We initially thought we should keep common dependencies in the root package.json. This caused React errors from having multiple instances of React running. 
 
 Another thing to note is you should never see a `package-lock.json` inside a sub-package’s folder. This means the `npm install` command was run inside it, which is incorrect! Delete the resulting `package-lock.json` as well as the `node_modules` it newly installed. When using npm workspaces, all dependencies live in the root `node_modules`.
 
