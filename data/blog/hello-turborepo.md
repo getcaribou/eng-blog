@@ -26,7 +26,7 @@ As we’ve faced multiple roadblocks undergoing this transition, we decided to r
 
 We started from a flat file system containing multiple apps that were all located in the project’s root folder. The directory structure itself needed work.
 
-Researching & The Design Document Phase
+### Researching & The Design Document Phase
 
 At Caribou, net-new functionality or highly complex additions to our systems must go through a design document process.
 
@@ -45,7 +45,7 @@ This is [easily done inside the root `package.json`](https://turborepo.org/docs/
 
 ### Run `npm install` to create the symlinks inside `node_modules`
 
-One thing to note is to not forget to rerun `npm install` at the project root (we initially did...). If you don’t, npm won’t create the symlinks to your workspaces/packages inside `node_modules`, and you won’t be able to use absolute paths to other modules inside your imports. 
+One thing to note is to not forget to rerun `npm install` at the project root (we initially did...). If you forget, npm won’t create the symlinks to your workspaces/packages inside `node_modules`, and you won’t be able to use absolute paths to other modules inside your imports. 
 
 ### npm v7 is needed or the IDE/compiler can't resolve modules
 
@@ -87,7 +87,7 @@ Another thing to note is you should never see a `package-lock.json` inside a sub
 
 We use webpack for our build pipeline, and found out that `webpack` was sometimes resolving modules that `tsc` couldn’t. This is problematic, as we wanted to use `tsc` for our CI checks! After experimentation, I found that imports must adhere to the following format:
 
-- Absolute imports from the current package must not be prefixed with the package’s name, i.e. if you are currently inside `ha-dash` you must write `import { whatever } from 'src/components` and not `import { whatever } from `ha-dash/src/components`.
+- Absolute imports from the current package must not be prefixed with the package’s name, i.e. if you are currently inside `ha-dash` you must write `import { whatever } from 'src/components` and not `import { whatever } from ha-dash/src/components`.
     - The `src` may be skipped by setting that package’s `baseUrl` to `src` in its `tsconfig.json`
 - Absolute imports from other packages must be written as `{package_name}/src/some_module`
     - Unfortunately we haven’t found how to skip the `/src/`  for cross-package imports yet. [This solution](https://github.com/nodejs/node/issues/14970#issuecomment-571887546) seemed promising but it causes the typescript compiler to hang for some reason.
@@ -156,7 +156,7 @@ deploy:
 
 ### Saving dependencies between builds
 
-While you are at it you, you can cache npm dependencies between runs. The strategy is slightly different:
+While you are at it, you can cache npm dependencies between runs. The strategy is slightly different:
 
 ```yaml
 install-deps:
