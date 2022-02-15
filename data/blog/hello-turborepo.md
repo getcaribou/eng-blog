@@ -1,5 +1,5 @@
 ---
-title: Turborepo At Caribou
+title: Pitfalls when Adding Turborepo To Your Project
 authors: [tcarre]
 date: 2022-02-10
 tags: [devops]
@@ -7,16 +7,18 @@ draft: false
 summary: Challenges scaling monorepo with npm workspaces, turborepo and CircleCI
 ---
 
-We at Caribou have recently adopted a new TypeScript monorepo stack for our app frontends, starting from a single package all rebuilt by Netlify at every release.
+We at Caribou have recently adopted a new TypeScript monorepo stack for our app frontends using [turborepo](https://turborepo.org/).
+
+## Issues faced with our original monorepo setup
 
 As our number of apps and codebases grew, we decided that we wanted to:
 
 - Save time and money on ever increasing build times
-    - Build times were increasing dramatically as we went from 2 apps in a monorepo to 4,and thus needed to build & deploy each one even though we had only made a change on one of them
+    - Build times were increasing dramatically as we went from 2 apps in our monorepo to 4. The original monorepo setup would naively deploy all apps inside the project on every push to GitHub. Once we got to 4 projects, the build times got really out of hand.
 - Enable the granular tracking of individual application deployments for our metrics monitoring
+    - We strive to do 5 releases per week on average (across all of our projects), and we need to track whether we're hitting these targets or not
 - Add CircleCI as a layer between GitHub and Netlify to manage our CI pipeline
     - Our other repos were already on CircleCI, so this allowed us to unify our CI/CD process
-- Decouple builds and deployments to save time and scale further
 
 As we’ve faced multiple roadblocks undergoing this transition, we decided to record them for the benefit of developers at Caribou or anyone else undertaking similar endeavours.
 
@@ -30,7 +32,7 @@ We started from a flat file system containing multiple apps that were all locate
 
 At Caribou, net-new functionality or highly complex additions to our systems must go through a design document process.
 
-We wrote a design document outlining our requirements and how the new stack would meet them. Our requirements were not complicated. We wanted to rebuild and deploy only those parts of the app that have changed, and add our desired checks on CircleCI. 
+We wrote a design document outlining our requirements and how the new stack would meet them. Our requirements were not complicated. We wanted to rebuild and deploy only those parts of the monorepo that have changed, and add our desired checks on CircleCI. 
 
 We had a first look at monorepo management. We knew [Lerna](https://lerna.js.org) was a popular choice, but [Turborepo](https://turborepo.org) had recently been acquired by Vercel and seemed highly promising. It purported to be very fast but simpler than Lerna, and one of our engineers had a positive experience with it.
 
@@ -87,7 +89,7 @@ Another thing to note is you should never see a `package-lock.json` inside a sub
 
 We use webpack for our build pipeline, and found out that `webpack` was sometimes resolving modules that `tsc` couldn’t. This is problematic, as we wanted to use `tsc` for our CI checks! After experimentation, I found that imports must adhere to the following format:
 
-- Absolute imports from the current package must not be prefixed with the package’s name, i.e. if you are currently inside `ha-dash` you must write `import { whatever } from 'src/components` and not `import { whatever } from ha-dash/src/components`.
+- Absolute imports from the current package must not be prefixed with the package’s name, i.e. if you are currently inside `ha-dash` (the name of one of our sub-projects within the monorepo) you must write `import { whatever } from 'src/components` and not `import { whatever } from ha-dash/src/components`.
     - The `src` may be skipped by setting that package’s `baseUrl` to `src` in its `tsconfig.json`
 - Absolute imports from other packages must be written as `{package_name}/src/some_module`
     - Unfortunately we haven’t found how to skip the `/src/`  for cross-package imports yet. [This solution](https://github.com/nodejs/node/issues/14970#issuecomment-571887546) seemed promising but it causes the typescript compiler to hang for some reason.
@@ -112,7 +114,7 @@ We use `jest` for tests, and found that in order for tests to work in our setup 
 
 ### Saving turbo cache artifacts between builds
 
-Turborepo stores build artifacts at `node_modules/.cache` in order to restore files which do not need to be rebuilt. In order to save those artifacts between. W
+Turborepo stores build artifacts at `node_modules/.cache` in order to restore files which do not need to be rebuilt.
 
 ```yaml
 build:
@@ -185,7 +187,7 @@ install-deps:
 
 We use `npm-deps-{{ checksum "package-lock.json" }}` this time, to look for cached node modules from runs of *any branch* that had the same `package-lock.json`. If none is found, we simply get the latest cached `node_modules`. Then `npm install` is run anyway, so that any missing package is added.
 
-## /!\ The netlify CLI cannot use same URL prefixes as automatic branch deployments
+## ⚠️ The netlify CLI cannot use same URL prefixes as automatic branch deployments
 
 [https://github.com/netlify/cli/issues/1984#issuecomment-862554734](https://github.com/netlify/cli/issues/1984#issuecomment-862554734)
 
@@ -195,9 +197,9 @@ As soon as you’ve used this feature once, you can no longer use that subdomain
 
 ## Only deploying the individual apps which turbo rebuilt
 
-This is something which the [documentation for the netlify CLI](https://cli.netlify.com/commands/deploy) doesn't tell you, so you won't find out until you actually run it: **the netlify CLI compares the newest build's file hashes with the previous build's hashes, and requests only those files which have changed.** In other words, you can safely use the netlify CLI to trigger deployments of *all* your packages, and netlify will only ever receives those files which have changed.
+This is something which the [documentation for the netlify CLI](https://cli.netlify.com/commands/deploy) doesn't tell you, so you won't find out until you actually run it: **the netlify CLI compares the newest build's file hashes with the previous build's hashes, and requests only those files which have changed.** In other words, you can safely use the netlify CLI to trigger deployments of *all* your packages, and netlify will only ever receive those files which have changed.
 
-However, if you are using something less sophisticated than netlify, here's a bash script I wrote before I realised the netlify CLI's capabilities.
+However, if you are using something less sophisticated than netlify, here's a bash script I wrote before I realised the netlify CLI's capabilities. This script will parse the turbo build output and only redeploy apps which were turbo deemed necessary to rebuild.
 
 ```bash
 # Save the turbo output with this command:
@@ -256,3 +258,8 @@ deploy_app() {
 # Conclusion
 
 Do you have experience transitioning to monorepo management tools? Do you see anything we can improve? Let us know! I hope this log of some of the challenges making the transition can be helpful to some of you. Happy hacking!
+
+# Did you enjoy this post? We're hiring!
+
+We have several [open roles](https://caribouwealth.notion.site/Careers-at-Caribou-357783b6007f4d15bae8c7b9651cebf5) across Ops, Design, Marketing and Engineering!
+
