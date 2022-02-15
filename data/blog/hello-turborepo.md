@@ -1,5 +1,5 @@
 ---
-title: Pitfalls when Adding Turborepo To Your Project
+title: Pitfalls When Adding Turborepo To Your Project
 authors: [tcarre]
 date: 2022-02-10
 tags: [devops]
@@ -16,9 +16,9 @@ As our number of apps and codebases grew, we decided that we wanted to:
 - Save time and money on ever increasing build times
     - Build times were increasing dramatically as we went from 2 apps in our monorepo to 4. The original monorepo setup would naively deploy all apps inside the project on every push to GitHub. Once we got to 4 projects, the build times got really out of hand.
 - Enable the granular tracking of individual application deployments for our metrics monitoring
-    - We strive to do 5 releases per week on average (across all of our projects), and we need to track whether we're hitting these targets or not
+    - We strive to do 5 releases per week on average (across all of our projects), and we need to track whether we're hitting these targets or not.
 - Add CircleCI as a layer between GitHub and Netlify to manage our CI pipeline
-    - Our other repos were already on CircleCI, so this allowed us to unify our CI/CD process
+    - Our other repos were already on CircleCI, so this allowed us to unify our CI/CD process.
 
 As we’ve faced multiple roadblocks undergoing this transition, we decided to record them for the benefit of developers at Caribou or anyone else undertaking similar endeavours.
 
@@ -35,6 +35,8 @@ At Caribou, net-new functionality or highly complex additions to our systems mus
 We wrote a design document outlining our requirements and how the new stack would meet them. Our requirements were not complicated. We wanted to rebuild and deploy only those parts of the monorepo that have changed, and add our desired checks on CircleCI. 
 
 We had a first look at monorepo management. We knew [Lerna](https://lerna.js.org) was a popular choice, but [Turborepo](https://turborepo.org) had recently been acquired by Vercel and seemed highly promising. It purported to be very fast but simpler than Lerna, and one of our engineers had a positive experience with it.
+
+After a few days of playing around with Turborepo, we concluded that its simple and intuitive API was sufficient justification to proceed with it as our tool of choice.
 
 Turborepo works with one of Yarn, npm, or pnpm workspaces. We already used npm as a package manager, so in order to keep things familiar we went with npm workspaces.
 
@@ -199,7 +201,7 @@ As soon as you’ve used this feature once, you can no longer use that subdomain
 
 This is something which the [documentation for the netlify CLI](https://cli.netlify.com/commands/deploy) doesn't tell you, so you won't find out until you actually run it: **the netlify CLI compares the newest build's file hashes with the previous build's hashes, and requests only those files which have changed.** In other words, you can safely use the netlify CLI to trigger deployments of *all* your packages, and netlify will only ever receive those files which have changed.
 
-However, if you are using something less sophisticated than netlify, here's a bash script I wrote before I realised the netlify CLI's capabilities. This script will parse the turbo build output and only redeploy apps which were turbo deemed necessary to rebuild.
+However, if you are using something less sophisticated than netlify, here's a bash script I wrote before I realised that netlify already took care of this. This script will parse the turbo build output and only redeploy apps which turbo deemed necessary to rebuild.
 
 ```bash
 # Save the turbo output with this command:
