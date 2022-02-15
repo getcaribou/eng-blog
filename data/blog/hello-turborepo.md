@@ -89,7 +89,7 @@ Another thing to note is you should never see a `package-lock.json` inside a sub
 
 We use webpack for our build pipeline, and found out that `webpack` was sometimes resolving modules that `tsc` couldn’t. This is problematic, as we wanted to use `tsc` for our CI checks! After experimentation, I found that imports must adhere to the following format:
 
-- Absolute imports from the current package must not be prefixed with the package’s name, i.e. if you are currently inside `ha-dash` (the name of one of our sub-projects within the monorepo) you must write `import { whatever } from 'src/components` and not `import { whatever } from ha-dash/src/components`.
+- Absolute imports from the current package must not be prefixed with the package’s name, i.e. if you are currently inside `ha-dash` (the name of one of our sub-projects within the monorepo) you must write `import { whatever } from 'src/components` and not `import { whatever } from 'ha-dash/src/components'`.
     - The `src` may be skipped by setting that package’s `baseUrl` to `src` in its `tsconfig.json`
 - Absolute imports from other packages must be written as `{package_name}/src/some_module`
     - Unfortunately we haven’t found how to skip the `/src/`  for cross-package imports yet. [This solution](https://github.com/nodejs/node/issues/14970#issuecomment-571887546) seemed promising but it causes the typescript compiler to hang for some reason.
