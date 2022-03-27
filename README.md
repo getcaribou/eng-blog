@@ -3,9 +3,6 @@
 To be eventually hosted on [engineering.caribouwealth.com](https://engineering.caribouwealth.com).
 
 ### TODO
-
-- [ ] Remove commenting functionality
-- [ ] Remove newsletter functionality
 - [ ] Set up alias from engineering@getcaribou.com to Gio's caribou account
 
 
